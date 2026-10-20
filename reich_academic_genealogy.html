@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f6f8f7">
+  <meta name="theme-color" content="#f4faf2">
   <title>Academic Genealogy of Reich’s Ancient-DNA Work</title>
   <style>
     :root {
       color-scheme: light dark;
-      --bg: #f6f8f7;
+      --bg: #f4faf2;
       --card: #fff;
-      --ink: #1c2a24;
-      --muted: #667570;
-      --border: #d9e2de;
-      --idea: #2563eb;
+      --ink: #1d3a26;
+      --muted: #58705e;
+      --border: #cfe3d1;
+      --accent: #16833c;
+      --idea: #16833c;
       --method: #d97706;
       --lab: #16834a;
       --reich: #7c3aed;
@@ -24,16 +25,17 @@
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #0f1714;
-        --card: #18231f;
-        --ink: #e3eee9;
-        --muted: #93a39c;
-        --border: #2c3b35;
-        --idea: #8ab4f8;
+        --bg: #10231a;
+        --card: #173127;
+        --ink: #e4f2e6;
+        --muted: #b3cbb8;
+        --border: #355a42;
+        --accent: #83d69a;
+        --idea: #83d69a;
         --method: #ffbd69;
         --lab: #72d69c;
         --reich: #c4a3ff;
-        --shadow: 0 2px 8px rgb(0 0 0 / 30%);
+        --shadow: 0 2px 8px rgb(0 0 0 / 20%);
       }
     }
     * { box-sizing: border-box; }
@@ -46,6 +48,20 @@
     .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 18px; color: var(--muted); font-size: 13px; }
     .legend span { display: inline-flex; align-items: center; gap: 7px; }
     .swatch { width: 20px; height: 3px; border-radius: 2px; background: var(--color); }
+    .style-switch { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; }
+    .style-switch button {
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--card);
+      color: var(--muted);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 650;
+      cursor: pointer;
+    }
+    .style-switch button[aria-pressed="true"] { border-color: var(--idea); background: var(--idea); color: #fff; }
+    .style-switch button:focus-visible { outline: 3px solid var(--idea); outline-offset: 2px; }
     main { padding-bottom: 40px; }
     .map-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 14px; background: var(--card); scrollbar-color: var(--border) transparent; }
     #map { position: relative; min-width: 900px; height: 560px; }
@@ -127,6 +143,9 @@
     .initials.method { background: var(--method); }
     .initials.lab { background: var(--lab); }
     .initials.reich { background: var(--reich); }
+    .initials.goldstein { background: #5a9cb5; }
+    .initials.priya { background: #c8777e; }
+    .initials.vagheesh { background: #6396bb; }
     .profile-heading h2 { margin: 0; font-size: 20px; line-height: 1.2; }
     .profile-heading p { margin: 3px 0 0; color: var(--muted); font-size: 13px; }
     .profile-copy { max-width: 76ch; margin: 14px 0 0; }
@@ -134,9 +153,78 @@
     .connections li { display: flex; gap: 8px; margin-top: 6px; color: var(--muted); }
     .connections button { padding: 0; border: 0; background: none; color: var(--idea); font: inherit; font-weight: 650; text-decoration: underline; cursor: pointer; }
     .connections button:focus-visible { outline: 2px solid var(--idea); outline-offset: 2px; }
-    @media (max-width: 600px) {
-      #map { min-width: 900px; height: 560px; }
-      .person { width: 162px; }
+    [hidden] { display: none !important; }
+    .comrade-view { --paper: var(--bg); --comrade-ink: var(--ink); --comrade-muted: var(--muted); --rule: var(--accent); }
+    .comrade-title { position: absolute; z-index: 2; top: 0; right: 0; left: 0; display: block; margin: 0; text-align: center; }
+    .comrade-title h2 { margin: 0; color: var(--comrade-ink); font: 700 clamp(25px, 3.5vw, 38px)/1.2 Georgia, "Times New Roman", serif; }
+    .comrade-title span { display: none; }
+    .comrade-scroll { position: absolute; inset: 52px 12px 14px; overflow: auto; background: var(--paper); }
+    .comrade-chart { position: relative; width: 100%; height: max(100%, 680px); }
+    .comrade-grid { position: relative; z-index: 1; width: 100%; height: 100%; }
+    .comrade-links { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+    .comrade-person { position: absolute; display: flex; min-width: 0; flex-direction: column; align-items: stretch; padding: 6px; border: 1px solid var(--person-border); border-radius: 3px; background: var(--portrait-fill); color: var(--comrade-ink); text-align: center; font: inherit; cursor: pointer; }
+    .comrade-person:hover { filter: brightness(.985); }
+    .comrade-person:focus-visible { outline: 2px solid var(--person-border); outline-offset: 1px; }
+    .comrade-person.idea { --person-border: #b8894e; --portrait-fill: color-mix(in srgb, var(--card) 92%, #b8894e); }
+    .comrade-person.goldstein { --person-border: #5a9cb5; --portrait-fill: color-mix(in srgb, var(--card) 92%, #5a9cb5); }
+    .comrade-person.reich { --person-border: #639274; --portrait-fill: color-mix(in srgb, var(--card) 92%, #639274); }
+    .comrade-person.paabo { --person-border: #7973b1; --portrait-fill: color-mix(in srgb, var(--card) 92%, #7973b1); }
+    .comrade-person.priya { --person-border: #df7378; --portrait-fill: color-mix(in srgb, var(--card) 92%, #df7378); }
+    .comrade-person.vagheesh { --person-border: #6396bb; --portrait-fill: color-mix(in srgb, var(--card) 92%, #6396bb); }
+    .comrade-person[data-id="cavalli"] { top: 0; left: .7%; width: 18.1%; height: 49%; }
+    .comrade-person[data-id="goldstein"] { top: 0; left: 27.8%; width: 17.2%; height: 48.5%; }
+    .comrade-person[data-id="reich"] { top: 0; left: 53.8%; width: 17.2%; height: 48.5%; }
+    .comrade-person[data-id="paabo"] { top: 0; left: 81.4%; width: 18.1%; height: 48%; }
+    .comrade-person[data-id="priya"] { top: 55.5%; left: 31%; width: 20.4%; height: 43.7%; }
+    .comrade-person[data-id="vagheesh"] { top: 55.5%; left: 64.5%; width: 20%; height: 43.7%; }
+    .portrait-mark { position: relative; display: grid; width: 100%; height: 53%; flex: none; place-items: center; overflow: hidden; background: color-mix(in srgb, var(--card) 80%, var(--person-border)); color: var(--person-border); font: 400 clamp(25px, 3vw, 42px)/1 Georgia, serif; }
+    .comrade-person[data-id="priya"] .portrait-mark,
+    .comrade-person[data-id="vagheesh"] .portrait-mark { height: 50%; }
+    .portrait-mark.initials-placeholder { isolation: isolate; }
+    .portrait-mark.initials-placeholder::before { position: absolute; z-index: -1; width: 52px; height: 52px; border: 1px solid var(--person-border); border-radius: 50%; content: ""; opacity: .6; }
+    .portrait-mark img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 32%; }
+    .comrade-person strong { margin: 4px 1px 0; font: 700 clamp(15px, 1.7vw, 21px)/1.12 Georgia, "Times New Roman", serif; }
+    .comrade-person small { margin: 6px 2px 0; color: var(--comrade-ink); font: clamp(12px, 1.35vw, 16px)/1.12 Georgia, "Times New Roman", serif; }
+    .comrade-edge { fill: none; stroke: var(--rule); stroke-width: 2; }
+    .comrade-edge.dashed { stroke-dasharray: 7 5; }
+    .comrade-arrow { fill: var(--rule); }
+    .comrade-edge-label { fill: var(--ink); text-anchor: middle; font: 16px Georgia, "Times New Roman", serif; }
+    .relationship-key { position: absolute; right: 10px; bottom: 0; left: 10px; display: flex; justify-content: center; gap: 4px 14px; margin: 0; color: var(--muted); }
+    .relationship-key span { color: var(--muted); font: 9px/1.2 system-ui, sans-serif; }
+    .relationship-key a { color: inherit; }
+    .relationship-key span:first-child { display: none; }
+    .comrade-hint { display: none; }
+    body[data-style="comrade"] { height: 100vh; height: 100dvh; overflow: hidden; background: var(--bg); color: var(--ink); }
+    body[data-style="comrade"] header { position: absolute; z-index: 5; bottom: 8px; left: 12px; width: auto; margin: 0; padding: 0; }
+    body[data-style="comrade"] header > h1,
+    body[data-style="comrade"] .intro,
+    body[data-style="comrade"] .legend,
+    body[data-style="comrade"] #profile { display: none; }
+    body[data-style="comrade"] .style-switch { gap: 4px; margin: 0; }
+    body[data-style="comrade"] .style-switch button { padding: 3px 7px; border-color: var(--border); border-radius: 2px; background: var(--card); color: var(--muted); font-size: 10px; }
+    body[data-style="comrade"] .style-switch button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: #fff; }
+    body[data-style="comrade"] main { position: relative; width: 100%; height: 100dvh; margin: 0; padding: 0; }
+    body[data-style="comrade"] #comrade-view { position: relative; display: block; width: 100%; height: 100%; }
+    @media (max-width: 880px) {
+      body[data-style="comrade"] header { top: 7px; bottom: auto; }
+      .comrade-title { top: 33px; padding: 0 10px; }
+      .comrade-title h2 { font-size: clamp(20px, 5vw, 29px); }
+      .comrade-scroll { inset: 78px 8px 18px; overflow: auto; }
+      .comrade-chart { width: 100%; height: auto; min-height: 100%; }
+      .comrade-grid { display: grid; width: auto; height: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 12px; padding: 8px; }
+      .comrade-person,
+      .comrade-person[data-id="cavalli"],
+      .comrade-person[data-id="goldstein"],
+      .comrade-person[data-id="reich"],
+      .comrade-person[data-id="paabo"],
+      .comrade-person[data-id="priya"],
+      .comrade-person[data-id="vagheesh"] { position: relative; inset: auto; width: 100%; height: auto; min-height: 0; padding: 6px; }
+      .portrait-mark, .comrade-person[data-id="priya"] .portrait-mark, .comrade-person[data-id="vagheesh"] .portrait-mark { height: clamp(94px, 30vw, 150px); }
+      .comrade-person strong { margin-top: 3px; font-size: clamp(12px, 3.5vw, 17px); }
+      .comrade-person small { margin-top: 3px; font-size: clamp(10px, 2.8vw, 13px); }
+      .comrade-links { display: none; }
+      .relationship-key { right: 4px; left: 4px; }
+      .relationship-key span:last-child { font-size: 8px; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
@@ -151,6 +239,10 @@
       and the methods that made ancient DNA research possible.
       <a href="30%20Population%20Mixtures%20%E2%80%93%20Interactive%20Map%20%2B%20Reader.html">Back to the population-mixtures map</a>
     </p>
+    <nav class="style-switch" aria-label="Choose genealogy style">
+      <button type="button" data-style="classic" aria-pressed="true">Minimal map</button>
+      <button type="button" data-style="comrade">Comrade Shamol Style</button>
+    </nav>
     <div class="legend" aria-label="Connection key">
       <span><i class="swatch" style="--color:var(--idea)"></i>Intellectual lineage</span>
       <span><i class="swatch" style="--color:var(--method)"></i>Ancient-DNA method</span>
@@ -158,12 +250,31 @@
     </div>
   </header>
   <main>
-    <div class="map-wrap" role="region" aria-label="Scrollable academic genealogy map">
-      <div id="map">
-        <svg id="links" aria-hidden="true"></svg>
+    <section id="classic-view" aria-label="Minimal map style">
+      <div class="map-wrap" role="region" aria-label="Scrollable academic genealogy map">
+        <div id="map">
+          <svg id="links" aria-hidden="true"></svg>
+        </div>
       </div>
-    </div>
-    <p class="map-hint">Select a person to see their role and key connections. Scroll sideways to explore the map on smaller screens.</p>
+      <p class="map-hint">Select a person to see their role and key connections. Scroll sideways to explore the map on smaller screens.</p>
+    </section>
+    <section id="comrade-view" class="comrade-view" aria-label="Comrade Shamol Style" hidden>
+      <div class="comrade-title">
+        <h2>A Genealogy of Human Population Genetics</h2>
+        <span>Comrade Shamol Style</span>
+      </div>
+      <div class="comrade-scroll" role="region" aria-label="Scrollable Comrade Shamol genealogy">
+        <div class="comrade-chart" id="comrade-chart">
+          <svg class="comrade-links" id="comrade-links" aria-hidden="true"></svg>
+          <div class="comrade-grid" id="comrade-grid"></div>
+        </div>
+      </div>
+      <div class="relationship-key" aria-label="Relationship and photo credits">
+        <span>Solid arrows: mentorship / students · dashed arrow: collaboration</span>
+        <span>Portraits cropped from the reference image supplied for this project.</span>
+      </div>
+      <p class="comrade-hint">Select a person to see their role and connections. Scroll sideways to view the full chart on smaller screens.</p>
+    </section>
     <section id="profile" aria-live="polite"></section>
   </main>
   <script>
@@ -233,9 +344,65 @@
       { from: "rohland", to: "reich", type: "lab", label: "Research partnership" }
     ];
 
+    const comradePeople = {
+      cavalli: { name: "Luca Cavalli-Sforza", initials: "LC", className: "idea", role: "Population-genetics pioneer", summary: "Pioneered the idea that human population history can be reconstructed using genetic variation, before the age of large-scale sequencing.", image: "assets/portraits/luca-cavalli-sforza-reference.jpg", alt: "Luca Cavalli-Sforza" },
+      goldstein: { name: "David B. Goldstein", initials: "DG", className: "goldstein", role: "Population geneticist", summary: "Population geneticist. PhD student of Cavalli-Sforza. Later mentor to Reich.", image: "assets/portraits/david-goldstein-reference.jpg", alt: "David B. Goldstein" },
+      reich: { name: "David Reich", initials: "DR", className: "reich", role: "Harvard geneticist", summary: "Scaled ancient-DNA research to high-throughput levels, reconstructing human population history. PhD student of Goldstein. Collaborates with Pääbo.", image: "assets/portraits/david-reich-reference.jpg", alt: "David Reich" },
+      paabo: { name: "Svante Pääbo", initials: "SP", className: "paabo", role: "Ancient-DNA pioneer", summary: "Pioneered sequencing of ancient hominin genomes.", image: "assets/portraits/svante-paabo-reference.jpg", alt: "Svante Pääbo" },
+      priya: { name: "Priya Moorjani", initials: "PM", className: "priya", role: "Geneticist · South Asian population history", summary: "Genetic admixture and South Asian population history, providing a clearer picture of Indian genetics. PhD student of Reich.", image: "assets/portraits/priya-moorjani-reference.jpg", alt: "Priya Moorjani" },
+      vagheesh: { name: "Vagheesh Narasimhan", initials: "VN", className: "vagheesh", role: "Ancient-DNA researcher", summary: "Ancient DNA and South/Central Asian population history, providing a clearer picture of Indian genetics. Postdoctoral researcher in Reich lab.", image: "assets/portraits/vagheesh-narasimhan-reference.jpg", alt: "Vagheesh Narasimhan" }
+    };
+    const comradeCards = {};
+    const comradeGrid = document.querySelector("#comrade-grid");
+    for (const [id, person] of Object.entries(comradePeople)) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `comrade-person ${person.className}`;
+      button.dataset.id = id;
+      button.setAttribute("aria-label", `${person.name}, ${person.role}`);
+      button.setAttribute("aria-pressed", "false");
+      const portrait = document.createElement("span");
+      portrait.className = "portrait-mark";
+      portrait.setAttribute("aria-hidden", "true");
+      if (person.image) {
+        const image = document.createElement("img");
+        image.src = person.image;
+        image.alt = person.alt;
+        image.loading = "eager";
+        image.decoding = "async";
+        portrait.removeAttribute("aria-hidden");
+        portrait.append(image);
+        button.append(portrait);
+      } else {
+        portrait.classList.add("initials-placeholder");
+        portrait.textContent = person.initials;
+        button.append(portrait);
+      }
+      const name = document.createElement("strong");
+      name.textContent = person.name;
+      const summary = document.createElement("small");
+      summary.textContent = person.summary;
+      button.append(name, summary);
+      button.addEventListener("click", () => selectComradePerson(id));
+      comradeGrid.append(button);
+      comradeCards[id] = button;
+    }
+
+    const comradeConnections = [
+      { from: "cavalli", to: "goldstein", type: "mentor", label: ["PhD", "mentorship"] },
+      { from: "goldstein", to: "reich", type: "mentor", label: ["PhD", "mentorship"] },
+      { from: "paabo", to: "reich", type: "collaboration", label: ["Collaboration", "and input on", "ancient DNA"] },
+      { from: "reich", to: "priya", type: "student", label: ["PhD student"] },
+      { from: "reich", to: "vagheesh", type: "postdoc", label: ["Postdoctoral researcher"] }
+    ];
+
     const map = document.querySelector("#map");
     const svg = document.querySelector("#links");
     const profile = document.querySelector("#profile");
+    const comradeChart = document.querySelector("#comrade-chart");
+    const comradeSvg = document.querySelector("#comrade-links");
+    let classicSelection = "reich";
+    let comradeSelection = "reich";
     const buttons = {};
     const tiers = [
       { y: 10, label: "Ideas and methods" },
@@ -322,6 +489,7 @@
     }
 
     function selectPerson(id) {
+      classicSelection = id;
       const selected = people[id];
       for (const [personId, button] of Object.entries(buttons)) {
         const connected = connections.some(
@@ -352,8 +520,115 @@
       });
     }
 
+    function selectComradePerson(id) {
+      comradeSelection = id;
+      const person = comradePeople[id];
+      const related = comradeConnections
+        .filter(({ from, to }) => from === id || to === id)
+        .map(({ from, to, type }) => {
+          const otherId = from === id ? to : from;
+          const relation = {
+            mentor: from === id ? "PhD mentorship" : "PhD mentor",
+            collaboration: "Ancient-DNA collaboration",
+            student: from === id ? "PhD student" : "PhD mentor",
+            postdoc: from === id ? "Postdoctoral researcher" : "Research supervisor"
+          }[type];
+          return `<li><span aria-hidden="true">${from === id ? "→" : "←"}</span><button type="button" data-comrade-person="${otherId}">${comradePeople[otherId].name}</button><span>${relation}</span></li>`;
+        }).join("");
+      Object.entries(comradeCards).forEach(([personId, card]) => {
+        card.setAttribute("aria-pressed", String(personId === id));
+      });
+      profile.innerHTML = `
+        <div class="profile-heading">
+          <i class="initials ${person.className}" aria-hidden="true">${person.initials}</i>
+          <div><h2>${person.name}</h2><p>${person.role}</p></div>
+        </div>
+        <p class="profile-copy">${person.summary}</p>
+        ${related ? `<ul class="connections">${related}</ul>` : ""}
+      `;
+      profile.querySelectorAll("[data-comrade-person]").forEach((button) => {
+        button.addEventListener("click", () => selectComradePerson(button.dataset.comradePerson));
+      });
+    }
+
+    function drawComradeConnections() {
+      const bounds = comradeChart.getBoundingClientRect();
+      const positions = Object.fromEntries(
+        Object.entries(comradeCards).map(([id, card]) => {
+          const rect = card.getBoundingClientRect();
+          return [id, {
+            left: rect.left - bounds.left,
+            right: rect.right - bounds.left,
+            top: rect.top - bounds.top,
+            bottom: rect.bottom - bounds.top,
+            centerX: rect.left - bounds.left + rect.width / 2
+          }];
+        })
+      );
+      comradeSvg.setAttribute("viewBox", `0 0 ${bounds.width} ${bounds.height}`);
+      const defs = `<defs><marker id="comrade-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path class="comrade-arrow" d="M0 0L10 5L0 10z"></path></marker></defs>`;
+      const paths = comradeConnections.map(({ from, to, type, label }) => {
+        const start = positions[from];
+        const end = positions[to];
+        const labelText = (x, y) => `<text class="comrade-edge-label" x="${x}" y="${y}">${label.map((line, index) => `<tspan x="${x}" dy="${index ? 17 : 0}">${line}</tspan>`).join("")}</text>`;
+        if (type === "mentor") {
+          const sameRow = Math.abs(start.top - end.top) < 8;
+          if (sameRow) {
+            const x1 = start.right;
+            const x2 = end.left;
+            const y = start.top + (start.bottom - start.top) * 0.35;
+            const x = (x1 + x2) / 2;
+            return `<path class="comrade-edge" marker-end="url(#comrade-arrow)" d="M${x1} ${y}L${x2} ${y}"></path>${labelText(x, y - 27)}`;
+          }
+          const x1 = start.centerX;
+          const x2 = end.centerX;
+          const y1 = start.bottom;
+          const y2 = end.top;
+          const bend = (y1 + y2) / 2;
+          const x = (x1 + x2) / 2;
+          return `<path class="comrade-edge" marker-end="url(#comrade-arrow)" d="M${x1} ${y1}L${x1} ${bend}L${x2} ${bend}L${x2} ${y2}"></path>${labelText(x, bend - 4)}`;
+        }
+        if (type === "collaboration") {
+          const x1 = start.left;
+          const x2 = end.right;
+          const y = start.top + (start.bottom - start.top) * 0.35;
+          const x = (x1 + x2) / 2;
+          return `<path class="comrade-edge dashed" marker-end="url(#comrade-arrow)" d="M${x1} ${y}L${x2} ${y}"></path>${labelText(x, y - 48)}`;
+        }
+        const trunkY = start.bottom + Math.max(12, (end.top - start.bottom) * 0.28);
+        const targetX = end.centerX;
+        const x = (start.centerX + targetX) / 2;
+        const labelY = trunkY + Math.min(22, (end.top - trunkY) * 0.6);
+        return `<path class="comrade-edge" marker-end="url(#comrade-arrow)" d="M${start.centerX} ${start.bottom}L${start.centerX} ${trunkY}L${targetX} ${trunkY}L${targetX} ${end.top}"></path>${labelText(x, labelY)}`;
+      }).join("");
+      comradeSvg.innerHTML = defs + paths;
+    }
+
+    document.querySelectorAll(".style-switch button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const comrade = button.dataset.style === "comrade";
+        document.body.dataset.style = comrade ? "comrade" : "classic";
+        document.querySelector("#classic-view").hidden = comrade;
+        document.querySelector("#comrade-view").hidden = !comrade;
+        document.querySelectorAll(".style-switch button").forEach((option) => {
+          option.setAttribute("aria-pressed", String(option === button));
+        });
+        requestAnimationFrame(() => {
+          if (comrade) {
+            drawComradeConnections();
+            selectComradePerson(comradeSelection);
+          } else {
+            drawConnections();
+            selectPerson(classicSelection);
+          }
+        });
+      });
+    });
+
     new ResizeObserver(drawConnections).observe(map);
+    new ResizeObserver(drawComradeConnections).observe(comradeChart);
     selectPerson("reich");
+    selectComradePerson("reich");
   </script>
 </body>
 </html>
