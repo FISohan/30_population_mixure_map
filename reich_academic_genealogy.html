@@ -1,0 +1,924 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Academic Genealogy of Reich’s Ancient-DNA Work</title>
+    <style>
+      :root {
+        --bg: #f6f8f7;
+        --card: #fff;
+        --ink: #1c2a24;
+        --mut: #667570;
+        --bd: #d9e2de;
+        --idea: #2563eb;
+        --tech: #d97706;
+        --reich: #7c3aed;
+        --ctx: #6b7280;
+        --sh: 0 2px 8px rgba(0, 0, 0, 0.08);
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #0f1714;
+          --card: #18231f;
+          --ink: #e3eee9;
+          --mut: #93a39c;
+          --bd: #2c3b35;
+          --sh: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #0f1714;
+        --card: #18231f;
+        --ink: #e3eee9;
+        --mut: #93a39c;
+        --bd: #2c3b35;
+        --sh: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          15px/1.5 system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+      }
+      header,
+      main {
+        max-width: 1380px;
+        margin: 0 auto;
+        padding: 0 16px;
+      }
+      header {
+        padding-top: 20px;
+      }
+      h1 {
+        font-family: Georgia, serif;
+        font-size: clamp(22px, 4vw, 34px);
+        margin: 0 0 6px;
+      }
+      header p {
+        margin: 0 0 6px;
+        max-width: 80ch;
+        color: var(--mut);
+      }
+      a {
+        color: var(--idea);
+      }
+      .leg {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+        margin: 12px 0;
+        font-size: 13px;
+        align-items: center;
+      }
+      .leg label {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        cursor: pointer;
+      }
+      .sw {
+        width: 22px;
+        height: 0;
+        border-top: 3px solid;
+      }
+      .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .leg b {
+        margin-right: 2px;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+      }
+      .gwrap {
+        overflow-x: auto;
+        border: 1px solid var(--bd);
+        border-radius: 12px;
+        background: var(--card);
+        scrollbar-color: var(--bd) transparent;
+      }
+      #g {
+        position: relative;
+        min-width: 1040px;
+        height: 800px;
+      }
+      #s {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .map-hint {
+        margin: -6px 0 0;
+        color: var(--mut);
+        font-size: 13px;
+      }
+      .band {
+        position: absolute;
+        left: 0;
+        right: 0;
+        border-top: 1px dashed var(--bd);
+      }
+      .band span {
+        position: absolute;
+        left: 10px;
+        top: 6px;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--mut);
+      }
+      .nd {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        width: 15.6%;
+        min-width: 132px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        text-align: left;
+        background: var(--card);
+        color: var(--ink);
+        border: 1px solid var(--bd);
+        border-left: 5px solid var(--c);
+        border-radius: 10px;
+        padding: 7px 8px;
+        cursor: pointer;
+        box-shadow: var(--sh);
+        font: inherit;
+        z-index: 2;
+        transition:
+          opacity 0.15s,
+          transform 0.15s;
+      }
+      .nd:hover {
+        transform: translate(-50%, -50%) scale(1.04);
+      }
+      .nd.on {
+        outline: 3px solid var(--c);
+        z-index: 3;
+      }
+      .nd.dim {
+        opacity: 0.3;
+      }
+      .nd.un {
+        border-style: dashed;
+      }
+      .nd b {
+        display: block;
+        font-size: 13px;
+        line-height: 1.2;
+      }
+      .nd small {
+        display: block;
+        font-size: 11px;
+        line-height: 1.25;
+        color: var(--mut);
+        margin-top: 2px;
+      }
+      .av {
+        flex: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: var(--c);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font: 700 11px system-ui;
+        font-style: normal;
+      }
+      .g-idea {
+        --c: var(--idea);
+      }
+      .g-tech {
+        --c: var(--tech);
+      }
+      .g-reich {
+        --c: var(--reich);
+      }
+      .g-ctx {
+        --c: var(--ctx);
+      }
+      .nd.big {
+        width: 19%;
+      }
+      .e {
+        fill: none;
+        stroke-width: 2.2;
+        transition: opacity 0.15s;
+      }
+      .e.dim {
+        opacity: 0.1;
+      }
+      .e.on {
+        stroke-width: 3.4;
+      }
+      .hit {
+        fill: none;
+        stroke: transparent;
+        stroke-width: 14;
+        cursor: help;
+      }
+      .hid {
+        display: none;
+      }
+      #panel {
+        background: var(--card);
+        border: 1px solid var(--bd);
+        border-radius: 12px;
+        padding: clamp(16px, 3vw, 26px);
+        box-shadow: var(--sh);
+        scroll-margin-top: 16px;
+      }
+      .ph {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .ph .av {
+        width: 46px;
+        height: 46px;
+        font-size: 15px;
+      }
+      .ph h2 {
+        margin: 0;
+        font-size: 20px;
+        line-height: 1.2;
+      }
+      .ph p {
+        margin: 2px 0 0;
+        color: var(--mut);
+        font-size: 13px;
+      }
+      #panel > p {
+        margin: 16px 0 0;
+        max-width: 80ch;
+      }
+      .detail-sections {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+        gap: 10px;
+        margin-top: 18px;
+      }
+      .detail-sections details {
+        align-self: start;
+        border: 1px solid var(--bd);
+        border-radius: 10px;
+        background: var(--bg);
+      }
+      .detail-sections summary {
+        padding: 11px 14px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 650;
+      }
+      .detail-sections summary:focus-visible,
+      .cn button:focus-visible {
+        outline: 2px solid var(--idea);
+        outline-offset: 2px;
+      }
+      .detail-sections details > ul,
+      .detail-sections details > .section-copy {
+        padding: 0 14px 14px;
+      }
+      .detail-sections ul {
+        margin: 0;
+        padding-left: 32px;
+      }
+      .detail-sections li {
+        margin: 6px 0;
+      }
+      .section-copy {
+        margin: 0;
+        max-width: 80ch;
+      }
+      .cn {
+        list-style: none;
+        padding-left: 14px !important;
+      }
+      .cn li {
+        display: flex;
+        gap: 8px;
+        align-items: baseline;
+      }
+      .cn button {
+        font: inherit;
+        background: none;
+        border: 0;
+        padding: 0;
+        color: var(--idea);
+        cursor: pointer;
+        text-decoration: underline;
+        font-weight: 600;
+        text-align: left;
+      }
+      .bg {
+        font-size: 12.5px;
+        color: var(--mut);
+        border-top: 1px solid var(--bd);
+        padding-top: 10px;
+        margin-top: 12px !important;
+      }
+      h2.sec {
+        font-family: Georgia, serif;
+        margin: 26px 0 8px;
+      }
+      #tl {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding-bottom: 12px;
+      }
+      .ev {
+        flex: 0 0 220px;
+        background: var(--card);
+        border: 1px solid var(--bd);
+        border-top: 4px solid var(--tech);
+        border-radius: 10px;
+        padding: 10px 12px;
+      }
+      .ev b {
+        font:
+          700 20px Georgia,
+          serif;
+      }
+      .ev p {
+        margin: 4px 0 8px;
+        font-size: 13px;
+      }
+      .ev button {
+        font: inherit;
+        font-size: 12px;
+        border: 1px solid var(--bd);
+        background: var(--bg);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 2px 9px;
+        margin: 2px 3px 0 0;
+        cursor: pointer;
+      }
+      footer {
+        font-size: 12.5px;
+        color: var(--mut);
+        padding: 8px 0 30px;
+        max-width: 90ch;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Academic Genealogy: who shaped David Reich’s ancient-DNA work</h1>
+      <p>
+        Built from the Introduction of <i>Who We Are and How We Got Here</i>.
+        Two lineages, one of ideas and one of technology, meet in Reich. Click
+        any person to see what they contributed and how they connect.
+        <a
+          href="30%20Population%20Mixtures%20%E2%80%93%20Interactive%20Map%20%2B%20Reader.html"
+          >← Back to the population-mixtures map</a
+        >
+      </p>
+      <div class="leg" id="leg"></div>
+    </header>
+    <main>
+      <div class="layout">
+        <div
+          class="gwrap"
+          role="region"
+          aria-label="Scrollable relationship map"
+        >
+          <div id="g"><svg id="s" aria-hidden="true"></svg></div>
+        </div>
+        <p class="map-hint">
+          Choose a person to explore their story. On smaller screens, scroll
+          sideways to see the whole map.
+        </p>
+        <aside id="panel" aria-live="polite"></aside>
+      </div>
+      <h2 class="sec">Timeline from the Introduction</h2>
+      <div id="tl"></div>
+      <footer>
+        All text is a paraphrase of the Introduction. Lines marked “Background”
+        add facts that are not in the book. Dashed cards are groups the author
+        mentions without naming individuals. Lines show who trained, informed or
+        worked with whom; arrows point from the source to the person who
+        received the idea, method or training.
+      </footer>
+    </main>
+    <script>
+      const TIAN = [
+        "Started from a roughly 40,000-year-old early modern human from Tianyuan Cave, China: only about 0.02% of the extracted DNA was human, the rest came from microbes",
+        "Direct sequencing was still too costly, even with technology about 100,000 times cheaper than before 2006",
+        "Borrowed the idea from medical genetics of keeping only the DNA of interest",
+        "Used lab-made 52-letter DNA “bait” strands, overlapping like roof shingles across much of chromosome 21, to fish matching human fragments out of the bone extract",
+        "Showed Tianyuan was an early modern human on the line to present-day East Asians, without unusually large archaic ancestry, contradicting claims based on skeleton shape",
+      ];
+      const P = {
+        cavalli: {
+          n: "Luca Cavalli-Sforza",
+          ini: "LC",
+          g: "idea",
+          t: 0,
+          x: 28,
+          r: "Founder, genetics of the human past",
+          i: "The book’s starting inspiration. In 1960 he bet that today’s genetic differences could reveal ancient migrations, a bet that drove his whole career. Reich counts himself part of his intellectual school.",
+          c: [
+            "Assembled 100+ blood-protein variants (ABO and others) and clustered people by continent",
+            "Moved to DNA: about 1,000 people from 50 populations at 300+ genome positions; an unlabelled computer sort recovered five groups (West Eurasians, East Asians, Native Americans, New Guineans, Africans)",
+            "Mapped blood-group variation across West Eurasia; the main gradient peaked in the Near East and faded northwest, read as farmers spreading into Europe and mixing with hunter-gatherers (“demic diffusion”)",
+            "Wrote <i>The History and Geography of Human Genes</i> (1994), weaving together archaeology, linguistics, history and genetics",
+          ],
+          w: "Data were too thin for his big claims, and ancient DNA later overturned demic diffusion (early farmers carried little hunter-gatherer ancestry; Sardinia has the most farmer ancestry). Yet Reich argues ancient DNA fulfilled his dream, comparing him to Moses who saw the promised land but could not enter.",
+          b: "Background: 1922–2018.",
+        },
+        novembre: {
+          n: "John Novembre",
+          ini: "JN",
+          g: "idea",
+          t: 0,
+          x: 9,
+          r: "Critic of demic diffusion (2008)",
+          i: "Not part of either lineage in the text: a colleague whose mathematics exposed a flaw in the Cavalli-Sforza model before ancient DNA settled it.",
+          c: [
+            "With colleagues, showed in 2008 that gradients like Europe’s can arise with no migration at all",
+            "Showed that a farmer expansion from the Near East could, counter-intuitively, produce a gradient at right angles to the migration when analysed with Cavalli-Sforza’s technique",
+          ],
+          w: "Cracked the model; ancient DNA then “drove a nail in the coffin”.",
+        },
+        goldstein: {
+          n: "David Goldstein",
+          ini: "DG",
+          g: "idea",
+          t: 1,
+          x: 28,
+          r: "Reich’s PhD supervisor",
+          i: "The bridge between generations: a student of Cavalli-Sforza who supervised Reich’s PhD.",
+          c: [
+            "Passed Cavalli-Sforza’s outlook (the genome as a prism on history) on to Reich",
+            "At a 1999 dinner with Reich and Kavita Nayar, mused on how well the past could be reconstructed from leftover traces, like rebuilding a room after a grenade blast or recalling extinct languages from a sealed cave",
+          ],
+          w: "The Introduction records him as mentor, not his own findings.",
+        },
+        nayar: {
+          n: "Kavita Nayar",
+          ini: "KN",
+          g: "idea",
+          t: 1,
+          x: 9,
+          r: "Cavalli-Sforza student",
+          i: "Goldstein’s wife and, like him, a student of Cavalli-Sforza.",
+          c: [
+            "Trained in the Cavalli-Sforza school",
+            "Joined the 1999 dinner conversation about reconstructing the past",
+          ],
+          w: "A brief mention, but it shows how close-knit that school was.",
+        },
+        paabo: {
+          n: "Svante Pääbo",
+          ini: "SP",
+          g: "tech",
+          t: 0,
+          x: 74,
+          r: "Ancient-DNA pioneer, Leipzig",
+          i: "His group at the Max Planck Institute for Evolutionary Anthropology built much of the technology behind genome-wide ancient DNA, originally for very old samples such as Neanderthals and Denisovans.",
+          c: [
+            "Developed ancient-DNA methods (with his Leipzig colleagues)",
+            "Took Reich on as an apprentice in 2007 for the Neanderthal and Denisova genome projects",
+            "Helped Reich set up his own lab in 2013, the first in the US focused on whole-genome ancient human DNA",
+            "Trained Nadin Rohland through a seven-year apprenticeship",
+          ],
+          w: "Reich calls his own work a scaling-up of Pääbo’s methods.",
+          b: "Background: awarded the 2022 Nobel Prize in Physiology or Medicine.",
+        },
+        medgen: {
+          n: "Medical geneticists",
+          ini: "MG",
+          g: "tech",
+          t: 0,
+          x: 52,
+          un: 1,
+          r: "Unnamed group",
+          c: [
+            "Developed ways to isolate the roughly 2% of the genome that is most interesting and discard the other 98%, the idea Meyer and Fu borrowed",
+          ],
+        },
+        molbio: {
+          n: "1990s molecular biologists",
+          ini: "MB",
+          g: "tech",
+          t: 0,
+          x: 91.5,
+          un: 1,
+          r: "Unnamed group",
+          c: [
+            "Adapted laser-etching from electronics to attach millions of chosen DNA sequences to silicon or glass wafers, where enzymes later cut them loose into solution, the route to synthetic “bait” DNA",
+          ],
+        },
+        meyer: {
+          n: "Matthias Meyer",
+          ini: "MM",
+          g: "tech",
+          t: 1,
+          x: 58,
+          r: "Co-inventor of DNA capture",
+          i: "Together with Qiaomei Fu in Pääbo’s lab, invented the DNA-isolation method Reich and Rohland later scaled up.",
+          c: TIAN,
+          w: "The method became central to the whole ancient-DNA revolution.",
+        },
+        fu: {
+          n: "Qiaomei Fu",
+          ini: "QF",
+          g: "tech",
+          t: 1,
+          x: 75,
+          r: "Co-inventor of DNA capture",
+          i: "Co-inventor, with Matthias Meyer, of the isolation method; the Tianyuan Cave study was the problem that forced the invention.",
+          c: TIAN,
+          w: "The method became central to the whole ancient-DNA revolution.",
+        },
+        rohland: {
+          n: "Nadin Rohland",
+          ini: "NR",
+          g: "tech",
+          t: 1,
+          x: 92,
+          r: "Reich’s lab partner",
+          i: "Served a seven-year apprenticeship in Pääbo’s lab, then became Reich’s partner in building his lab.",
+          c: [
+            "Recognised with Reich that the Meyer–Fu capture could power ancient DNA at industrial scale",
+            "Adapted it to the whole genome: bait strands (made with German colleagues) covering over a million variable positions, boosting useful DNA more than 100-fold, plus about 10× more by targeting only informative positions",
+            "Helped automate the process with robots so one person handles 90+ samples in a few days",
+          ],
+          w: "Their “genomics factory” brought cost below $500 per sample.",
+          b: "Note: you wrote “Navin”; the book spells it Nadin.",
+        },
+        reich: {
+          n: "David Reich",
+          ini: "DR",
+          g: "reich",
+          t: 2,
+          x: 43,
+          big: 1,
+          r: "Harvard ancient-DNA lab",
+          i: "Trained by a Cavalli-Sforza student, then apprenticed with Pääbo: the idea lineage and the technology lineage meet in him.",
+          c: [
+            "Started his own lab in 2003 (funded largely by studies of variation and disease risk)",
+            "From 2007 worked on Pääbo’s Neanderthal and Denisova genome projects; in 2013 opened a Harvard ancient-DNA lab",
+            "Industrialised the Leipzig methods: genome-wide data from 3,000+ ancient samples by August 2017, under $500 each, with about half of screened skeletons yielding data (≈75% in Russia, ≈30% in the Near East)",
+            "His lab published over half the world’s genome-wide ancient human DNA by the end of 2015",
+            "Findings: steppe migration largely replaced northern Europe’s population after ~5,000 years ago; Near Eastern farming arose among several very different populations that later mixed; early Pacific colonists were not the sole ancestors of today’s islanders",
+            "Co-designed a microchip to survey present-day variation: 10,000+ people, 1,000+ populations",
+          ],
+          w: "The ideas of Cavalli-Sforza finally had the data they needed.",
+        },
+        mallick: {
+          n: "Swapan Mallick",
+          ini: "SM",
+          g: "reich",
+          t: 3,
+          x: 43,
+          r: "Lab computing pipeline",
+          i: "A physicist who joined Reich’s lab years before the scale-up.",
+          c: [
+            "Built the computing that sorts billions of DNA sequences back to the individuals they came from",
+            "Screens out contaminated samples and produces an easily accessible dataset",
+            "Kept revising the processing as the data types and volume changed",
+          ],
+          w: "The lab work was “only the beginning”; the analysis is just as intricate.",
+          b: "Note: this EPUB prints the name as “Shop Mallick”, which looks like a typo for Swapan Mallick.",
+        },
+        zimmer: {
+          n: "Carl Zimmer",
+          ini: "CZ",
+          g: "ctx",
+          t: 3,
+          x: 85,
+          r: "NYT science journalist",
+          i: "Not an ancestor, but a witness to the pace of the field.",
+          c: [
+            "Expected to write on ancient DNA about every six months; now covers a major paper every few weeks",
+          ],
+          w: "A barometer of how fast the revolution moves.",
+        },
+      };
+      const TY = {
+        mentor: ["Trained / supervised", "#2563eb"],
+        method: ["Idea or method passed on", "#d97706"],
+        collab: ["Same lab / partnership", "#16a34a"],
+        critique: ["Critique", "#dc2626"],
+        personal: ["Personal tie", "#db2777"],
+        context: ["Context", "#6b7280"],
+      };
+      const E = [
+        ["cavalli", "goldstein", "mentor", "Trained him"],
+        ["cavalli", "nayar", "mentor", "Trained her"],
+        ["goldstein", "reich", "mentor", "PhD supervisor"],
+        [
+          "paabo",
+          "reich",
+          "mentor",
+          "Apprenticeship 2007; helped found lab 2013",
+        ],
+        ["paabo", "rohland", "mentor", "Seven-year apprenticeship"],
+        ["paabo", "meyer", "collab", "Same Leipzig lab"],
+        ["paabo", "fu", "collab", "Same Leipzig lab"],
+        ["meyer", "reich", "method", "DNA-capture method adopted"],
+        ["fu", "reich", "method", "DNA-capture method adopted"],
+        ["medgen", "meyer", "method", "Targeted-isolation idea borrowed"],
+        ["molbio", "fu", "method", "Wafer-synthesis technology borrowed"],
+        ["rohland", "reich", "collab", "Partner in the “ancient-DNA factory”"],
+        ["mallick", "reich", "collab", "Built the data pipeline"],
+        [
+          "novembre",
+          "cavalli",
+          "critique",
+          "2008: gradients without migration",
+        ],
+        ["nayar", "goldstein", "personal", "Married"],
+        ["zimmer", "reich", "context", "Covers the field"],
+      ];
+      const TL = [
+        [
+          "1960",
+          "Cavalli-Sforza bets that present-day genes can reveal ancient migrations.",
+          ["cavalli"],
+        ],
+        [
+          "1994",
+          "<i>The History and Geography of Human Genes</i> appears.",
+          ["cavalli"],
+        ],
+        [
+          "1999",
+          "Dinner where Reich, Goldstein and Nayar daydream about reconstructing the past.",
+          ["reich", "goldstein", "nayar"],
+        ],
+        ["2003", "Reich starts his own lab.", ["reich"]],
+        ["c. 2006", "Sequencing becomes ~100,000× cheaper.", ["meyer", "fu"]],
+        [
+          "2007",
+          "Reich begins his apprenticeship with Pääbo.",
+          ["reich", "paabo"],
+        ],
+        [
+          "2008",
+          "Novembre and colleagues undermine demic diffusion.",
+          ["novembre", "cavalli"],
+        ],
+        [
+          "2009",
+          "Whole-genome data era begins; Reich lectures at MIT.",
+          ["reich"],
+        ],
+        [
+          "2013",
+          "Reich’s Harvard ancient-DNA lab opens, with Pääbo’s help.",
+          ["reich", "paabo", "rohland"],
+        ],
+        [
+          "2015",
+          "Ancient-DNA publishing “hyperdrive”; Reich’s lab has over half the world’s data.",
+          ["reich"],
+        ],
+        [
+          "Aug 2017",
+          "More than 3,000 ancient samples processed.",
+          ["reich", "rohland", "mallick"],
+        ],
+      ];
+      const $ = (s) => document.querySelector(s),
+        G = $("#g"),
+        S = $("#s"),
+        el = {};
+      let cur = "reich",
+        hide = {};
+      const tiers = [
+        [9, "Pioneers & critics"],
+        [31, "Students, inventors & colleagues"],
+        [57, "Where the lineages meet"],
+        [83, "Reich lab & context"],
+      ];
+      tiers.forEach(([y, l]) => {
+        const b = document.createElement("div");
+        b.className = "band";
+        b.style.top = y - 10.5 + "%";
+        b.innerHTML = "<span>" + l + "</span>";
+        G.appendChild(b);
+      });
+      Object.entries(P).forEach(([id, p]) => {
+        const b = document.createElement("button");
+        b.className =
+          "nd g-" + p.g + (p.un ? " un" : "") + (p.big ? " big" : "");
+        b.style.left = p.x + "%";
+        b.style.top = tiers[p.t][0] + "%";
+        b.setAttribute("aria-label", p.n + ", " + p.r);
+        b.setAttribute("aria-pressed", "false");
+        b.innerHTML =
+          '<i class="av">' +
+          p.ini +
+          "</i><span><b>" +
+          p.n +
+          "</b><small>" +
+          p.r +
+          "</small></span>";
+        b.onclick = () => reveal(id);
+        G.appendChild(b);
+        el[id] = b;
+      });
+      $("#leg").innerHTML =
+        "<span><b>People:</b></span>" +
+        [
+          ["idea", "Idea lineage"],
+          ["tech", "Technology lineage"],
+          ["reich", "Reich lab"],
+          ["ctx", "Context"],
+        ]
+          .map(
+            ([g, l]) =>
+              `<span><i class="dot" style="background:var(--${g})"></i> ${l}</span>`,
+          )
+          .join("") +
+        "<span><b>Links (tick to show):</b></span>" +
+        Object.entries(TY)
+          .map(
+            ([k, [l, c]]) =>
+              `<label><input type="checkbox" data-k="${k}" checked><i class="sw" style="border-color:${c}"></i>${l}</label>`,
+          )
+          .join("");
+      $("#leg").onchange = (e) => {
+        hide[e.target.dataset.k] = !e.target.checked;
+        draw();
+      };
+      const out = {},
+        inn = {};
+      E.forEach((e, k) => {
+        if (P[e[0]].t === P[e[1]].t) return;
+        (out[e[0]] ??= []).push(k);
+        (inn[e[1]] ??= []).push(k);
+      });
+      Object.values(out).forEach((a) =>
+        a.sort((p, q) => P[E[p][1]].x - P[E[q][1]].x),
+      );
+      Object.values(inn).forEach((a) =>
+        a.sort((p, q) => P[E[p][0]].x - P[E[q][0]].x),
+      );
+      const off = (a, k) =>
+        a && a.length > 1 ? (a.indexOf(k) - (a.length - 1) / 2) * 20 : 0;
+      function rel(id) {
+        const s = new Set([id]),
+          D = ["mentor", "method", "collab"];
+        [
+          [0, 1],
+          [1, 0],
+        ].forEach(([f, t]) => {
+          const q = [id];
+          while (q.length) {
+            const n = q.pop();
+            E.forEach((e) => {
+              if (D.includes(e[2]) && e[f] === n && !s.has(e[t])) {
+                s.add(e[t]);
+                q.push(e[t]);
+              }
+            });
+          }
+        });
+        E.forEach((e) => {
+          if (e[0] === id) s.add(e[1]);
+          if (e[1] === id) s.add(e[0]);
+        });
+        return s;
+      }
+      function draw() {
+        const cr = G.getBoundingClientRect(),
+          pos = (id) => {
+            const r = el[id].getBoundingClientRect();
+            return {
+              l: r.left - cr.left,
+              r: r.right - cr.left,
+              t: r.top - cr.top,
+              b: r.bottom - cr.top,
+              cx: (r.left + r.right) / 2 - cr.left,
+              cy: (r.top + r.bottom) / 2 - cr.top,
+            };
+          },
+          R = rel(cur);
+        let h =
+          "<defs>" +
+          Object.entries(TY)
+            .map(
+              ([k, [, c]]) =>
+                `<marker id="m${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${c}"/></marker>`,
+            )
+            .join("") +
+          "</defs>";
+        E.forEach(([a, b, ty, lb], k) => {
+          if (hide[ty]) return;
+          const A = pos(a),
+            B = pos(b),
+            on =
+              R.has(a) &&
+              R.has(b) &&
+              (a === cur ||
+                b === cur ||
+                (rel(cur).has(a) &&
+                  rel(cur).has(b) &&
+                  !["critique", "personal", "context"].includes(ty))),
+            c = TY[ty][1];
+          let d;
+          if (P[a].t === P[b].t) {
+            const [x1, x2] = A.cx < B.cx ? [A.r, B.l] : [A.l, B.r];
+            d = `M${x1} ${A.cy}L${x2} ${A.cy}`;
+          } else {
+            const dn = P[a].t < P[b].t,
+              y1 = dn ? A.b : A.t,
+              y2 = dn ? B.t : B.b,
+              x1 = A.cx + off(out[a], k),
+              x2 = B.cx + off(inn[b], k),
+              dy = (y2 - y1) / 2;
+            d = `M${x1} ${y1}C${x1} ${y1 + dy} ${x2} ${y2 - dy} ${x2} ${y2}`;
+          }
+          const dash =
+            ty === "critique"
+              ? "7 5"
+              : ty === "personal" || ty === "context"
+                ? "2 5"
+                : "";
+          h += `<path class="e${on ? " on" : " dim"}" d="${d}" stroke="${c}" ${dash ? `stroke-dasharray="${dash}"` : ""} ${ty === "personal" || ty === "context" ? "" : `marker-end="url(#m${ty})"`}/><path class="hit" d="${d}"><title>${lb}</title></path>`;
+        });
+        S.innerHTML = h;
+      }
+      function sel(id) {
+        cur = id;
+        const R = rel(id);
+        Object.entries(el).forEach(([k, b]) => {
+          b.classList.toggle("on", k === id);
+          b.classList.toggle("dim", !R.has(k));
+          b.setAttribute("aria-pressed", String(k === id));
+        });
+        draw();
+        panel(id);
+      }
+      function reveal(id) {
+        sel(id);
+      }
+      function panel(id) {
+        const p = P[id],
+          cn = E.map((e) => {
+            const [a, b, ty, lb] = e;
+            if (a !== id && b !== id) return "";
+            const o = a === id ? b : a,
+              ar =
+                ty === "personal" || ty === "context"
+                  ? "↔"
+                  : a === id
+                    ? "→"
+                    : "←";
+            return `<li><span style="color:${TY[ty][1]}">${ar}</span><span><button data-id="${o}">${P[o].n}</button> · ${lb}</span></li>`;
+          }).join("");
+        const connectionCount = E.filter(
+          ([a, b]) => a === id || b === id,
+        ).length;
+        $("#panel").className = "g-" + p.g;
+        $("#panel").innerHTML =
+          `<div class="ph"><i class="av">${p.ini}</i><div><h2>${p.n}</h2><p>${p.r}</p></div></div>${p.i ? `<p>${p.i}</p>` : ""}<div class="detail-sections"><details><summary>Contributions (${p.c.length})</summary><ul>${p.c.map((x) => `<li>${x}</li>`).join("")}</ul></details>${p.w ? `<details><summary>Why it matters</summary><p class="section-copy">${p.w}</p></details>` : ""}<details><summary>Connections (${connectionCount})</summary><ul class="cn">${cn}</ul></details>${p.b ? `<details><summary>Notes and context</summary><p class="section-copy">${p.b}</p></details>` : ""}</div>`;
+      }
+      $("#panel").onclick = (e) => {
+        const b = e.target.closest("[data-id]");
+        if (b) reveal(b.dataset.id);
+      };
+      $("#tl").innerHTML = TL.map(
+        ([y, t, ps]) =>
+          `<div class="ev"><b>${y}</b><p>${t}</p>${ps.map((i) => `<button data-id="${i}">${P[i].n}</button>`).join("")}</div>`,
+      ).join("");
+      $("#tl").onclick = (e) => {
+        const b = e.target.closest("[data-id]");
+        if (b) reveal(b.dataset.id);
+      };
+      new ResizeObserver(draw).observe(G);
+      sel("reich");
+    </script>
+  </body>
+</html>
