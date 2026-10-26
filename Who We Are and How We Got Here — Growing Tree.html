@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Who We Are and How We Got Here — Growing Tree</title>
+<style>
+:root{--bg:#faf8f4;--fg:#1f2421;--mut:#6b716c;--card:#fff;--bd:#ddd8cd;--grid:#e9e5db;--l:40%;color-scheme:light;
+ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161a18;--fg:#e8e6df;--mut:#9aa19b;--card:#1f2421;--bd:#343b36;--grid:#262c28;--l:66%;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161a18;--fg:#e8e6df;--mut:#9aa19b;--card:#1f2421;--bd:#343b36;--grid:#262c28;--l:66%;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 Georgia,'Times New Roman',serif}
+main{max-width:1040px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:22px;margin:0 0 2px}.sub{color:var(--mut);margin:0 0 14px;font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chip{border:1.5px solid var(--bd);background:var(--card);color:var(--fg);border-radius:20px;padding:5px 11px;font:13px system-ui,sans-serif;cursor:pointer}
+.chip.on{color:#fff;border-color:transparent}
+.tools{font:12px system-ui,sans-serif;color:var(--mut);margin-bottom:10px}
+.tools button{font:inherit;border:0;background:none;color:var(--fg);text-decoration:underline;cursor:pointer;padding:0 6px}
+.wrap{overflow:auto;max-height:80vh;cursor:grab;touch-action:pan-x pan-y;overscroll-behavior:contain;background:var(--card);border:1px solid var(--bd);border-radius:10px}.wrap.drag{cursor:grabbing;user-select:none}.zb{font:15px system-ui,sans-serif!important;text-decoration:none!important;border:1px solid var(--bd)!important;border-radius:6px;padding:1px 9px!important;background:var(--card)!important;margin-left:4px}
+svg{display:block;min-width:760px;width:100%;height:auto}
+text{fill:var(--fg);font-family:system-ui,sans-serif}
+.new{animation:f .7s ease both}@keyframes f{from{opacity:0}to{opacity:1}}
+.hint{fill:var(--mut);font-size:15px}
+.log{margin-top:18px;display:grid;gap:10px}
+.log div{background:var(--card);border:1px solid var(--bd);border-left-width:5px;border-radius:8px;padding:9px 12px;font-size:14px}
+.log b{font-family:system-ui,sans-serif;font-size:13px}.log p{margin:3px 0 0;color:var(--mut)}
+.leg{font:12px system-ui,sans-serif;color:var(--mut);margin-top:10px}
+</style>
+</head>
+<body>
+<main>
+<h1>Who We Are and How We Got Here — the growing tree</h1>
+<p class="sub">যে chapter শেষ করেছো সেটা tick করো — tree-তে নতুন branch যোগ হবে। Time axis square-root scale (পুরনো ঘটনাগুলো compressed)।</p>
+<div class="chips" id="chips"></div>
+<div class="tools"><button id="all">Mark all</button>·<button id="none">Reset</button> &nbsp;Stretch: <button class="zb" id="zo" aria-label="Zoom out">−</button><button class="zb" id="zr" aria-label="Reset zoom">100%</button><button class="zb" id="zi" aria-label="Zoom in">+</button> <span>(Ctrl/⌘ + scroll, drag করে pan)</span></div>
+<div class="wrap"><svg id="t" viewBox="0 0 980 740" role="img" aria-label="Phylogenetic tree"></svg></div>
+<div class="leg">সরু solid = lineage · dashed = ghost lineage (শুধু genome থেকে inferred) · ✝ = extinct · ● = ancient sample · তীর = admixture (gene flow) · ♂ = sex-biased (Ch 10)। Positions schematic; dates প্রতিটা chapter-এর opening timeline থেকে, approximate।</div>
+<div class="log" id="log"></div>
+</main>
+<script>
+const CH=[null,["How the Genome Explains Who We Are",3],["Encounters with Neanderthals",25],["Ancient DNA Opens the Floodgates",53],["Humanity’s Ghosts",77],["The Making of Modern Europe",99],["The Collision That Formed India",123],["In Search of Native American Ancestors",155],["The Genomic Origins of East Asians",187],["Rejoining Africa to the Human Story",207],["The Genomics of Inequality",229],["The Genomics of Race and Identity",247],["The Future of Ancient DNA",274]];
+const NOTE={10:"নতুন lineage নেই — ♂ চিহ্ন দেখায় কোন admixture event-এ sex-biased pattern (steppe ancestry) নিয়ে আলোচনা আছে।",11:"নতুন branch নেই — এই chapter-এর কথা: tree আসলে web, প্রতিটা leaf-ই mixed; ‘pure’ population বলে কিছু নেই।",12:"নতুন branch নেই — এখানে ancient DNA-র পরের সম্ভাবনা; tree-র unsampled অংশগুলো ভবিষ্যতে ভরবে।"};
+// id,parent,splitYa,endYa,label,chapter,flags (g ghost, x extinct)
+const L=[
+['M',null,1200000,0,'Modern human lineage',1,''],
+['N','M',600000,39000,'Neanderthals',2,'x'],
+['NA','M',55000,0,'Non-Africans (out of Africa)',2,''],
+['S','M',1200000,400000,'Superarchaic lineage',3,'g'],
+['D','N',430000,40000,'Denisovans',3,'x'],
+['OC','NA',50000,0,'Australo-Papuans (Oceanians)',3,''],
+['BE','NA',52000,11000,'Basal Eurasians',4,'g'],
+['NEF','NA',47000,0,'West Eurasians / Near East lineage',4,''],
+['EE','NA',45000,0,'East Eurasians',4,''],
+['ANE','NEF',40000,7000,'Ancient North Eurasians',4,'g'],
+['WHG','NEF',37000,5000,'European hunter-gatherers',4,''],
+['EEF','NEF',11000,8000,'Anatolian farmers',5,''],
+['YAM','NEF',7000,3500,'Yamnaya steppe pastoralists',5,''],
+['EUR','EEF',8000,0,'Present-day Europeans',5,''],
+['ASI','NA',50000,3500,'Ancestral South Indians',6,'g'],
+['SA','NEF',5000,0,'Present-day South Asians',6,''],
+['AM','EE',25000,15000,'First Americans',7,''],
+['SN','AM',15000,0,'Southern Native Americans',7,''],
+['NN','AM',15000,0,'Northern Native Americans',7,''],
+['EA','EE',6000,0,'Eskimo-Aleut (Arctic)',7,''],
+['YRF','EE',9000,0,'Yellow & Yangtze River farmers',8,''],
+['AN','YRF',5000,3000,'Austronesians (Taiwan)',8,''],
+['PI','AN',3000,0,'Pacific islanders / Polynesians',8,''],
+['WA','M',350000,0,'West African–related lineage',9,''],
+['SAF','M',250000,0,'San / southern African foragers',9,''],
+['BAN','WA',4000,0,'Bantu-speaking farmers',9,'']];
+const ORDER=['S','D','N','M','WA','SAF','BAN','NA','OC','BE','EE','EA','AM','SN','NN','YRF','AN','PI','ANE','WHG','NEF','EEF','YAM','EUR','ASI','SA'];
+// from,to,ya,chapter,label,sexBias
+const E=[
+['N','NA',50000,2,'Neanderthal gene flow'],
+['D','OC',46000,3,'Denisovan gene flow'],
+['BE','NEF',11000,4,'Basal Eurasian ancestry'],
+['ANE','YAM',7000,5,'ANE-related ancestry'],
+['WHG','EUR',7000,5,'hunter-gatherer ancestry'],
+['YAM','EUR',4500,5,'steppe ancestry',1],
+['ASI','SA',3800,6,'ASI ancestry'],
+['YAM','SA',3800,6,'steppe ancestry',1],
+['ANE','AM',17000,7,'ANE ancestry'],
+['OC','SN',9000,7,'Population Y (Australasian-related signal)'],
+['OC','PI',3000,8,'Papuan-related ancestry'],
+['BAN','M',3000,9,'Bantu expansion'],
+['NEF','M',3000,9,'Eurasian back-migration into East Africa']];
+// lineage,ya,label,chapter
+const SM=[['N',430000,'Sima de los Huesos',3],['ANE',24000,'Mal’ta boy',4],['EE',40000,'Tianyuan',8],['SN',12600,'Clovis-culture infant',7]];
+const X0=30,T0=1300000,Y0=44;let X1=640,DY=26;
+const xs=t=>X0+(1-Math.sqrt(t/T0))*(X1-X0);
+const ys=id=>Y0+ORDER.indexOf(id)*DY;
+const col=c=>`hsl(${(c*29+10)%360} 62% var(--l))`;
+let done=new Set();
+try{done=new Set(JSON.parse(localStorage.getItem('reich-tree')||'[]'))}catch(e){}
+let prev=new Set(),init=true;
+function save(){try{localStorage.setItem('reich-tree',JSON.stringify([...done]))}catch(e){}}
+function draw(){
+ const vis=id=>{const l=L.find(a=>a[0]===id);return l&&done.has(l[5])};
+ const H=Y0+DY*ORDER.length+14,VW=X1+340;document.getElementById('t').setAttribute('viewBox',`0 0 ${VW} ${H}`);let s='<defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0L8,4L0,8z" fill="context-stroke"/></marker></defs>';
+ [[1200000,'1.2 Mya'],[600000,'600k'],[200000,'200k'],[50000,'50k'],[10000,'10k'],[0,'today']].forEach(([t,n])=>{const x=xs(t);s+=`<line x1="${x}" x2="${x}" y1="28" y2="${H}" style="stroke:var(--grid)"/><text x="${x}" y="20" font-size="11" text-anchor="middle" style="fill:var(--mut)">${n}</text>`});
+ if(!done.size)s+='<text class="hint" x="490" y="380" text-anchor="middle">উপরে Chapter 1 tick করলেই গাছের গোড়া গজাবে 🌱</text>';
+ const drawn=new Set();const nw=id=>{drawn.add(id);return !init&&!prev.has(id)?' class="new"':''};
+ L.forEach(([id,p,sp,en,lb,c,f])=>{
+  if(!done.has(c))return;
+  const y=ys(id),a=xs(sp),b=xs(en),st=`stroke:${col(c)};stroke-width:2.4;fill:none`+(f.includes('g')?';stroke-dasharray:6 4':'');
+  const yp=p?ys(p):y;
+  s+=`<g${nw('L'+id)}><path d="M${a},${yp}V${y}H${b}" style="${st}"/><circle cx="${a}" cy="${y}" r="3.2" style="fill:${col(c)}"/>`;
+  s+=`<text x="${b+7}" y="${y+4}" font-size="11.5">${lb}${f.includes('x')?' ✝':''}${f.includes('g')?' (ghost)':''}</text></g>`;
+ });
+ E.forEach(([a,b,t,c,lb,sx])=>{
+  if(!done.has(c)||!vis(a)||!vis(b))return;
+  const x=xs(t),y1=ys(a),y2=ys(b),d=y2>y1?-9:9;
+  s+=`<g${nw('E'+a+b+t)}><path d="M${x},${y1}V${y2+d}" style="stroke:${col(c)};stroke-width:1.6;stroke-dasharray:3 3;fill:none" marker-end="url(#ah)"/><title>${lb}</title>`;
+  if(sx&&done.has(10))s+=`<text x="${x+5}" y="${(y1+y2)/2}" font-size="13" style="fill:${col(10)}">♂</text>`;
+  s+='</g>';
+ });
+ SM.forEach(([l,t,lb,c])=>{
+  if(!done.has(c)||!vis(l))return;
+  const x=xs(t),y=ys(l);
+  s+=`<g${nw('S'+lb)}><circle cx="${x}" cy="${y}" r="5" style="fill:var(--card);stroke:${col(c)};stroke-width:2"/><text x="${x}" y="${y-9}" font-size="10" text-anchor="middle" style="fill:var(--mut)">${lb}</text></g>`;
+ });
+ document.getElementById('t').innerHTML=s;
+ // log
+ let h='';
+ for(let c=1;c<=12;c++){if(!done.has(c))continue;
+  const ls=L.filter(l=>l[5]===c).map(l=>`${l[4]} (~${l[2]>=1000?(l[2]/1000)+'k':l[2]} ya)`);
+  const es=E.filter(e=>e[3]===c).map(e=>e[4]);
+  const t=NOTE[c]||(ls.length?'Branches: '+ls.join('; ')+'.':'Concepts chapter: whole-genome ancestry (Y/mtDNA শুধু দুটো lineage), trunk-টাই শুরু।')+(es.length?' Admixture: '+es.join('; ')+'.':'');
+  h+=`<div style="border-left-color:${col(c)}"><b>Ch ${c} · ${CH[c][0]} (p. ${CH[c][1]})</b><p>${t}</p></div>`;
+ }
+ document.getElementById('log').innerHTML=h;
+ prev=drawn;init=false;
+ document.querySelectorAll('.chip').forEach(b=>{const c=+b.dataset.c,on=done.has(c);b.classList.toggle('on',on);b.style.background=on?col(c):'';});
+}
+const chips=document.getElementById('chips');
+for(let c=1;c<=12;c++){const b=document.createElement('button');b.className='chip';b.dataset.c=c;b.textContent=`Ch ${c}`;b.title=CH[c][0];
+ b.onclick=()=>{done.has(c)?done.delete(c):done.add(c);save();draw()};chips.appendChild(b)}
+document.getElementById('all').onclick=()=>{for(let c=1;c<=12;c++)done.add(c);save();draw()};
+document.getElementById('none').onclick=()=>{done.clear();prev=new Set();save();draw()};
+draw();
+let z=1;const W=document.querySelector('.wrap'),SV=document.getElementById('t');
+function fit(){const k=Math.max(W.clientWidth/980,0.78);SV.style.minWidth='0';SV.style.width=((X1+340)*k)+'px'}
+function zoom(n){const cx=(W.scrollLeft+W.clientWidth/2)/W.scrollWidth,cy=(W.scrollTop+W.clientHeight/2)/W.scrollHeight;z=Math.min(8,Math.max(1,n));X1=30+610*z;DY=26*(1+(z-1)*.5);draw();fit();W.scrollLeft=cx*W.scrollWidth-W.clientWidth/2;W.scrollTop=cy*W.scrollHeight-W.clientHeight/2;document.getElementById('zr').textContent=Math.round(z*100)+'%'}
+addEventListener('resize',()=>{if(z>1)fit()});
+document.getElementById('zi').onclick=()=>zoom(z*1.25);
+document.getElementById('zo').onclick=()=>zoom(z/1.25);
+document.getElementById('zr').onclick=()=>zoom(1);
+window.addEventListener('wheel',e=>{if(e.ctrlKey||e.metaKey){e.preventDefault();zoom(z*(e.deltaY<0?1.12:1/1.12))}},{passive:false});
+['gesturestart','gesturechange','gestureend'].forEach(n=>document.addEventListener(n,e=>e.preventDefault()));
+let pd=0,pz=1;const dist=t=>Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);
+W.addEventListener('touchstart',e=>{if(e.touches.length===2){pd=dist(e.touches);pz=z}},{passive:true});
+W.addEventListener('touchmove',e=>{if(e.touches.length===2&&pd){e.preventDefault();zoom(pz*dist(e.touches)/pd)}},{passive:false});
+W.addEventListener('touchend',()=>{pd=0});
+let dg=null;
+W.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'){dg=[e.clientX,e.clientY,W.scrollLeft,W.scrollTop];W.classList.add('drag')}});
+window.addEventListener('pointermove',e=>{if(dg){W.scrollLeft=dg[2]-(e.clientX-dg[0]);W.scrollTop=dg[3]-(e.clientY-dg[1])}});
+window.addEventListener('pointerup',()=>{dg=null;W.classList.remove('drag')});
+</script>
+</body>
+</html>
